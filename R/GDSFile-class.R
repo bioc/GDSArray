@@ -15,7 +15,7 @@
 setClass(
     "GDSFile",
     slots=c(
-        file = "character",
+        filename = "character",
         current_path = "character"
     )
 )
@@ -25,7 +25,7 @@ setMethod("show", "GDSFile", function(object) {
     nodes <- nodes[startsWith(nodes, object@current_path)]
     cat(
         "class: ", class(object), "\n",
-        "file: ", object@file, "\n",
+        "file: ", object@filename, "\n",
         "current node: ", object@current_path, "\n",
         "subnodes:\n  ", paste(nodes, collapse="\n  "), "\n",
         sep = ""
@@ -48,7 +48,7 @@ setMethod("show", "GDSFile", function(object) {
 
 GDSFile <- function(file, current_path="")
 {
-    new("GDSFile", file = file, current_path = current_path)
+    new("GDSFile", filename = file, current_path = current_path)
 }
 
 ###------------
@@ -57,29 +57,29 @@ GDSFile <- function(file, current_path="")
 
 #' @rdname GDSFile-class
 #' @aliases GDSFile-method
-#' @description \code{gdsfile}: \code{file} slot getter for
+#' @description \code{gdsfn}: \code{filename} slot getter for
 #'     \code{GDSFile} object.
 #' @param object \code{GDSFile} object.
-#' @return \code{gdsfile}: the file path of corresponding
+#' @return \code{gdsfn}: the file path of corresponding
 #'     \code{GDSfile} object.
-#' @exportMethod gdsfile
+#' @exportMethod gdsfn
 #' @examples
 #' fn <- gdsExampleFileName("seqgds")
 #' gf <- GDSFile(fn)
-#' gdsfile(gf)
+#' gdsfn(gf)
 
-setMethod("gdsfile", "GDSFile", function(object) object@file)
+setMethod("gdsfn", "GDSFile", function(object) object@filename)
 
 #' @rdname GDSFile-class
-#' @aliases GDSFile-method GDSFile,gdsfile-method
-#' @description \code{gdsfile<-}: \code{file} slot setter for
+#' @aliases GDSFile-method GDSFile,gdsfn-method
+#' @description \code{gdsfn<-}: \code{filename} slot setter for
 #'     \code{GDSFile} object.
 #' @param value the new gds file path
-#' @exportMethod "gdsfile<-"
+#' @exportMethod "gdsfn<-"
 
-setReplaceMethod("gdsfile", "GDSFile", function(object, value) {
+setReplaceMethod("gdsfn", "GDSFile", function(object, value) {
     new_filepath <- tools::file_path_as_absolute(value)
-    BiocGenerics:::replaceSlots(object, file=value, check=FALSE)
+    BiocGenerics:::replaceSlots(object, filename=value, check=FALSE)
 })
 
 ###--------------------
@@ -117,8 +117,8 @@ setMethod("$", "GDSFile", function(x, name)
     } else {
         stop(wmsg("the gds path of '", name, "' does not exist"))
     }
-    if (x@current_path %in% gdsnodes(x@file))
-        GDSArray(gdsfile(x), x@current_path)
+    if (x@current_path %in% gdsnodes(x@filename))
+        GDSArray(gdsfn(x), x@current_path)
     else
         x
 })
@@ -150,25 +150,25 @@ setGeneric("gdsnodes", function(x, node) standardGeneric("gdsnodes"), signature=
 #' gf <- GDSFile(fn)
 #' gdsnodes(gf)
 #' gdsnodes(gf, "genotype")
-#' gdsfile(gf)
+#' gdsfn(gf)
 
 setMethod("gdsnodes", "ANY", function(x, node)
 {
-    f <- openfn.gds(x)
-    on.exit(closefn.gds(f))
+    ## browser()
+    gds <- acquireGDS(x)
     if (missing(node))
-        node <- ls.gdsn(f)
+        node <- ls.gdsn(gds)
 
     ## check if empty folder, then remove.
-    a <- lapply(node, function(x) ls.gdsn(index.gdsn(f, x)))
+    a <- lapply(node, function(x) ls.gdsn(index.gdsn(gds, x)))
     isfd <- vapply(node,
-                   function(x) objdesp.gdsn(index.gdsn(f, x))$type == "Folder",
+                   function(x) objdesp.gdsn(index.gdsn(gds, x))$type == "Folder",
                    logical(1))
     emptyfd <- lengths(a) == 0 & isfd
     node <- node[!emptyfd]
 
     repeat {
-        a <- lapply(node, function(x) ls.gdsn(index.gdsn(f, x)))
+        a <- lapply(node, function(x) ls.gdsn(index.gdsn(gds, x)))
         if (all(lengths(a)==0L)) {
             break
         } else {
@@ -185,5 +185,5 @@ setMethod("gdsnodes", "ANY", function(x, node)
 #' @exportMethod gdsnodes
 setMethod("gdsnodes", "GDSFile", function(x, node)
 {
-    gdsnodes(gdsfile(x), node)
+    gdsnodes(gdsfn(x), node)
 })

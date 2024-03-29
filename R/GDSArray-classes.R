@@ -7,7 +7,6 @@ setClass("GDSArraySeed",
                            # to be extended by concrete subclasses with
                            # an array-like semantic.
          slots = c(
-             gds = "gds.class",
              filename = "character",  # Absolute path to the gds file so the object
                                       # doesn't break when the user changes the working
                                       # directory (e.g. with setwd()).
@@ -16,13 +15,9 @@ setClass("GDSArraySeed",
              dimnames = "list"
          )
          )
-## NOTE: gds(added), file->filename, name->varname, permute(removed), first_val(removed).
-
-## if the file is open, no action internally
-.reopen <- function(x) gdsfmt:::.reopen(x)
 
 ## slot accessors
-.gds      <- function(x) x@gds
+## .gds      <- function(x) x@gds
 .filename <- function(x) x@filename
 .varname  <- function(x) x@varname
 ## .dim      <- function(x) x@dim  ## REMOVE: dim() works directly if is one slot.
@@ -35,7 +30,7 @@ setMethod(
     "show", "GDSArraySeed",
     function(object) {
         cat("GDSArraySeed\n",
-            "File: ", .filename(object), "\n",
+            "GDS File path: ", .filename(object), "\n",
             "Array node: ", .varname(object), "\n",
             "Dim: ", paste(dim(object), collapse=" x "), "\n",
             sep="")
@@ -54,20 +49,18 @@ setMethod(
     ##       cannot contain NAs or non-positive values.
     ## https://bioconductor.org/packages/release/bioc/vignettes/DelayedArray/inst/doc/02-Implementing_a_backend.html#extract_array
     ans_dim <- DelayedArray:::get_Nindex_lengths(index, dim(x))
-    # reopen the file if needed
-    .reopen(.gds(x))
-    on.exit(closefn.gds(.gds(x)))
-    # read
+    gds <- acquireGDS(.filename(x))
+    ## read
     if (any(ans_dim == 0L))
     {     
-        tp <- objdesp.gdsn(index.gdsn(.gds(x), .varname(x)))$type
+        tp <- objdesp.gdsn(index.gdsn(gds, .varname(x)))$type
         ans <- switch(as.character(tp),
             Raw=raw(), Integer=integer(), Logical=logical(),
             Real=double(), String=character(), Factor = factor(),
             stop("Unsupported data type: ", tp))
         dim(ans) <- ans_dim
     } else {
-        nd <- index.gdsn(.gds(x), .varname(x))
+        nd <- index.gdsn(gds, .varname(x))
         ## ans <- readex.gdsn(nd, index, .sparse=FALSE)  ## kept from SCArray
         ans <- readex.gdsn(nd, index, simplify = "none")
         if (!is.array(ans))  # ans must be an array 
@@ -104,12 +97,13 @@ setMethod("extract_array", "GDSArraySeed", .extract_array_from_GDSArraySeed)
 #' @import gdsfmt
 #' @importFrom tools file_path_as_absolute
 
-GDSArraySeed <- function(gds, varname)
+GDSArraySeed <- function(fn, varname)
 {
-    ## check gds
-    stopifnot(inherits(gds, "gds.class"))
+    ## check file name
+    stopifnot(is.character(fn), length(fn) == 1L, !is.na(fn))
     ## check varname
     stopifnot(is.character(varname), length(varname)==1L, !is.na(varname))
+    gds <- acquireGDS(fn)
     nd <- index.gdsn(gds, varname, silent=TRUE)
     if (is.null(nd))
         stop("No '", varname, "'")
@@ -119,7 +113,7 @@ GDSArraySeed <- function(gds, varname)
         stop("'", varname, "' is not an array.")
     dm <- dp$dim
     # output
-    new2("GDSArraySeed", gds=gds, filename=gds$filename, varname=varname,
+    new2("GDSArraySeed", filename=fn, varname=varname,
         dim=dm, dimnames=vector("list", length(dm)))
 }
 ## FIXME: may need to remove ".get_gdsnode_dim", and
@@ -226,11 +220,8 @@ GDSArray <- function(gdsfile, varname)
         seed <- gdsfile
     } else {
         if (is.character(gdsfile)) {
-            ## gdsfile <- openfn.gds(gdsfile, readonly = TRUE, allow.duplicate = FALSE)
-            gdsfile <- openfn.gds(gdsfile)
-            on.exit(closefn.gds(gdsfile))
-        }
         seed <- GDSArraySeed(gdsfile, varname)
+        }
     }
     DelayedArray(seed)   ## does the automatic coercion to GDSMatrix if 2-dim.
 }
@@ -254,9 +245,8 @@ gdsExampleFileName <- function(type = c("seqgds", "snpgds"))
     type <- match.arg(type)
     fn <- switch(type, snpgds = SNPRelate::snpgdsExampleFileName(),
                  seqgds = SeqArray::seqExampleFileName("gds"))
-    f <- openfn.gds(fn)
-    on.exit(closefn.gds(f))
-    fmt <- get.attr.gdsn(f$root)$FileFormat
+    gds <- acquireGDS(fn)
+    fmt <- get.attr.gdsn(gds$root)$FileFormat
     msg <- switch(fmt, SNP_ARRAY = "This is a SNP GDS file",
                   SEQ_ARRAY = "This is a SeqArray GDS file")
     cat(msg, "\n", sep="")

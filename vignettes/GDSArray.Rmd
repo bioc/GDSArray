@@ -7,7 +7,7 @@ author:
   affiliation: Fred Hutchinson Cancer Research Center, Seattle, WA
 - name: Martin Morgan
   affiliation: Roswell Park Comprehensive Cancer Center, Buffalo, NY
-date: "last edit: 3/16/2018"
+date: "last edit: 3/26/2024"
 output:
     BiocStyle::html_document:
         toc: true
@@ -115,7 +115,7 @@ GDSArray(file, "annotation/format/DP/data")
 
 The `GDSFile` is a light-weight class to represent GDS files. It has
 the `$` completion method to complete any possible gds nodes. It could
-be used as a convenient `GDSArray` constructor if the slot of
+ be used as a convenient `GDSArray` constructor if the slot of
 `current_path` in `GDSFile` object represents a valid gds node.
 Otherwise, it will return the `GDSFile` object with an updated
 `current_path`.
@@ -137,9 +137,9 @@ gt <- GDSArray(file, "genotype/data")
 seed(gt)
 ```
 
-- `gdsfile` returns the file path of the corresponding GDS file. 
+- `gdsfn` returns the file path of the corresponding GDS file. 
 ```{r, gdsfileAccessor}
-gdsfile(gt)
+gdsfn(gt)
 ```
 
 ### Available GDS nodes
@@ -191,17 +191,15 @@ dp[rowMeans(dp) < 60, ]
 
 The `GDSArraySeed` class represents the 'seed' for the `GDSArray`
 object. It is not exported from the [GDSArray][] package. Seed objects
-should contain the gds file of `gds.class`, GDS file path, GDS file
-node name, and are expected to satisfy the [seed
+should contain the GDS file path, node name, and are expected to
+satisfy the [seed
 contract](https://bioconductor.org/packages/release/bioc/vignettes/DelayedArray/inst/doc/02-Implementing_a_backend.html#the-seed-contract)
 for implementing a `DelayedArray` backend, i.e. to support dim() and
 dimnames().
 
 ```{r, GDSArraySeed}
-gds <- openfn.gds(file)
-seed <- GDSArray:::GDSArraySeed(gds, "genotype/data")
+seed <- GDSArray:::GDSArraySeed(file, "genotype/data")
 seed
-closefn.gds(gds)
 ```
 
 The seed can be used to construct a `GDSArray` instance.

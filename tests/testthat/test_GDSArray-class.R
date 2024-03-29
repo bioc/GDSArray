@@ -1,8 +1,7 @@
 file <- gdsExampleFileName("snpgds")
 
 test_that("GDSArraySeed constructor works", {
-    f <- openfn.gds(file)
-    seed <- GDSArray:::GDSArraySeed(f, "genotype")
+    seed <- GDSArray:::GDSArraySeed(file, "genotype")
     expect_s4_class(seed, "GDSArraySeed")
     expect_true(validObject(seed))
     ## expect_equal(dim(seed), c(9088L, 279L))
@@ -10,7 +9,6 @@ test_that("GDSArraySeed constructor works", {
     expect_equal(class(dimnames(seed)), "list")
     ## expect_equal(lengths(unname(dimnames(seed))), dim(seed))
     expect_equal(dimnames(seed), list(NULL, NULL))
-    closefn.gds(f)
 })
 
 

@@ -3,32 +3,32 @@
 \name{seed,GDSArray-method}
 \alias{seed,GDSArray-method}
 \alias{seed<-,GDSArray-method}
-\alias{gdsfile}
-\alias{gdsfile,GDSArraySeed-method}
-\alias{gdsfile,GDSArray-method}
-\alias{gdsfile,DelayedArray-method}
-\alias{gdsfile<-}
-\alias{gdsfile<-,GDSArraySeed-method}
-\alias{gdsfile<-,GDSArray-method}
+\alias{gdsfn}
+\alias{gdsfn,GDSArraySeed-method}
+\alias{gdsfn,GDSArray-method}
+\alias{gdsfn,DelayedArray-method}
+\alias{gdsfn<-}
+\alias{gdsfn<-,GDSArraySeed-method}
+\alias{gdsfn<-,GDSArray-method}
 \title{GDSArraySeed or GDSArray related methods, slot getters and setters.}
 \usage{
 \S4method{seed}{GDSArray}(x)
 
 \S4method{seed}{GDSArray}(x) <- value
 
-gdsfile(object)
+gdsfn(object)
 
-\S4method{gdsfile}{GDSArraySeed}(object)
+\S4method{gdsfn}{GDSArraySeed}(object)
 
-\S4method{gdsfile}{GDSArray}(object)
+\S4method{gdsfn}{GDSArray}(object)
 
-\S4method{gdsfile}{DelayedArray}(object)
+\S4method{gdsfn}{DelayedArray}(object)
 
-gdsfile(object) <- value
+gdsfn(object) <- value
 
-\S4method{gdsfile}{GDSArraySeed}(object) <- value
+\S4method{gdsfn}{GDSArraySeed}(object) <- value
 
-\S4method{gdsfile}{GDSArray}(object) <- value
+\S4method{gdsfn}{GDSArray}(object) <- value
 }
 \arguments{
 \item{x}{the \code{GDSArray} and \code{GDSArraySeed} objects.}
@@ -49,7 +49,7 @@ SummarizedExperiment object.}
 \code{seed}: the \code{GDSArraySeed} of \code{GDSArray}
     object.
 
-\code{gdsfile}: the character string for the gds file path.
+\code{gdsfn}: the character string for the gds file path.
 }
 \description{
 \code{dim}, \code{dimnames}: dimension and dimnames of
@@ -61,10 +61,10 @@ SummarizedExperiment object.}
 \code{seed<-}: the \code{GDSArraySeed} setter for
     \code{GDSArray} object.
 
-\code{gdsfile}: on-disk location of GDS file
+\code{gdsfn}: on-disk location of GDS file
     represented by this object.
 
-\code{gdsfile<-}: the setter of the gds file path for
+\code{gdsfn<-}: the setter of the gds file path for
     `GDSArraySeed` and `GDSArray`.
 }
 \examples{
@@ -75,5 +75,5 @@ dimnames(ga)
 type(ga)
 seed(ga)
 dim(seed(ga))
-gdsfile(ga)
+gdsfn(ga)
 }
