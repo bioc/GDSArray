@@ -5,19 +5,32 @@
 \alias{releaseGDS}
 \title{Acquire the GDS file connection in R in the \code{gds.class} class.}
 \usage{
-acquireGDS(path, ...)
+acquireGDS(path, type = NULL, ...)
 
-releaseGDS(path)
+releaseGDS(path, type = NULL, ...)
 }
 \arguments{
 \item{path}{String containing a path to a GDS file.}
+
+\item{type}{String containing the GDS file type. Case
+insensitive. Can be "seqgds" for a GDS file with sequencing
+data, or "snpgds" for a GDS file with SNP data. This argument
+was added for the \code{VariantExperiment} package for certain
+functionalities. By default is NULL, which returns a regular
+\code{gds.class}.}
 
 \item{other}{arguments to be passed to \code{openfn.gds()} inside
 \code{acquireGDS}.}
 }
 \value{
-For \code{acquireGDS}, a \code{gds.class} object, which are
-    identical to that returned by \code{gdsfmt::openfn.gds(path)}
+For \code{acquireGDS}, by default returns a regular
+    \code{gds.class} object, which are identical to that returned
+    by \code{gdsfmt::openfn.gds(path)}. If \code{type} is not NULL,
+    a \code{SeqVarGDSClass} that is identical to
+    \code{SeqArray::seqOPen(path)}, or \code{SNPGDSFileClass} that
+    is identical to \code{SNPRelate::snpgdsOpen(path)}. Both are
+    inherited from \code{gds.class} but with additional checking
+    and methods.
 
 For \code{releaseGDS}, any existing \code{gds.class} object for the
 \code{path} is disconnected and cleared from cache, and \code{NULL}
@@ -39,6 +52,7 @@ Acquire a (possibly cached) \code{gds.class} object given it's path.
 fn <- gdsExampleFileName()
 gdscon <- acquireGDS(fn)
 acquireGDS(fn)  ## just re-uses the cache
+acquireGDS(fn, type = "seqgds") ## construct a new GDS connection 
 releaseGDS(fn)  ## clears the cache
 
 }
