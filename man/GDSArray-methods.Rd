@@ -7,9 +7,6 @@
 \alias{gdsfn,GDSArraySeed-method}
 \alias{gdsfn,GDSArray-method}
 \alias{gdsfn,DelayedArray-method}
-\alias{gdsfn<-}
-\alias{gdsfn<-,GDSArraySeed-method}
-\alias{gdsfn<-,GDSArray-method}
 \title{GDSArraySeed or GDSArray related methods, slot getters and setters.}
 \usage{
 \S4method{seed}{GDSArray}(x)
@@ -23,12 +20,6 @@ gdsfn(object)
 \S4method{gdsfn}{GDSArray}(object)
 
 \S4method{gdsfn}{DelayedArray}(object)
-
-gdsfn(object) <- value
-
-\S4method{gdsfn}{GDSArraySeed}(object) <- value
-
-\S4method{gdsfn}{GDSArray}(object) <- value
 }
 \arguments{
 \item{x}{the \code{GDSArray} and \code{GDSArraySeed} objects.}
@@ -63,9 +54,6 @@ SummarizedExperiment object.}
 
 \code{gdsfn}: on-disk location of GDS file
     represented by this object.
-
-\code{gdsfn<-}: the setter of the gds file path for
-    `GDSArraySeed` and `GDSArray`.
 }
 \examples{
 fn <- gdsExampleFileName("snpgds")

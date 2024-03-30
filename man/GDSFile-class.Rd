@@ -7,7 +7,7 @@
 \alias{GDSFile-constructor}
 \alias{gdsfn,GDSFile-method}
 \alias{GDSFile-method}
-\alias{gdsfn<-,GDSFile-method}
+\alias{gdsfn<-}
 \alias{GDSFile,gdsfn-method}
 \alias{$,GDSFile-method}
 \alias{gdsnodes}
@@ -19,7 +19,7 @@ GDSFile(file, current_path = "")
 
 \S4method{gdsfn}{GDSFile}(object)
 
-\S4method{gdsfn}{GDSFile}(object) <- value
+gdsfn(object) <- value
 
 \S4method{$}{GDSFile}(x, name)
 

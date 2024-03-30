@@ -1,3 +1,10 @@
+CHANGE IN VERSION 1.23.1
+----------------------------
+BUG FIXES
+
++ Removed `gdsfn<-` filename setter for GDSArray and
+  GDSArraySeed. Only valid for `GDSFile` class.
+
 CHANGE IN VERSION 1.5.3
 ----------------------------
 

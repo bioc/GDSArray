@@ -59,29 +59,3 @@ setMethod("gdsfn", "GDSArray", function(object) gdsfn(seed(object)))
 
 #' @rdname GDSArray-methods
 setMethod("gdsfn", "DelayedArray", function(object) gdsfn(seed(object)))
-
-#' @rdname GDSArray-methods
-#' @description \code{gdsfn<-}: the setter of the gds file path for
-#'     `GDSArraySeed` and `GDSArray`.
-setGeneric(
-    "gdsfn<-",
-    function(object, value) standardGeneric("gdsfn<-"),
-    signature="object")
-
-#' @rdname GDSArray-methods
-#' @exportMethod "gdsfn<-"
-setReplaceMethod( "gdsfn", "GDSArraySeed", function(object, value) {
-    new_filepath <- tools::file_path_as_absolute(value)
-    ## Set new path.
-    BiocGenerics:::replaceSlots(object, filename = value, check = FALSE)
-})
-
-#' @rdname GDSArray-methods
-#' @exportMethod "gdsfn<-"
-setReplaceMethod("gdsfn", "GDSArray", function(object, value) {
-    new_filepath <- tools::file_path_as_absolute(value)
-    object@seed <- BiocGenerics:::replaceSlots(seed(object),
-                                               filename = value,
-                                               check = FALSE)
-    object
-})

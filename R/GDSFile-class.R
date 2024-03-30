@@ -75,8 +75,12 @@ setMethod("gdsfn", "GDSFile", function(object) object@filename)
 #' @description \code{gdsfn<-}: \code{filename} slot setter for
 #'     \code{GDSFile} object.
 #' @param value the new gds file path
-#' @exportMethod "gdsfn<-"
+setGeneric(
+    "gdsfn<-",
+    function(object, value) standardGeneric("gdsfn<-"),
+    signature="object")
 
+#' @exportMethod "gdsfn<-"
 setReplaceMethod("gdsfn", "GDSFile", function(object, value) {
     new_filepath <- tools::file_path_as_absolute(value)
     BiocGenerics:::replaceSlots(object, filename=value, check=FALSE)
