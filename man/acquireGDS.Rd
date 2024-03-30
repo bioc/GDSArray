@@ -5,12 +5,15 @@
 \alias{releaseGDS}
 \title{Acquire the GDS file connection in R in the \code{gds.class} class.}
 \usage{
-acquireGDS(path)
+acquireGDS(path, ...)
 
 releaseGDS(path)
 }
 \arguments{
 \item{path}{String containing a path to a GDS file.}
+
+\item{other}{arguments to be passed to \code{openfn.gds()} inside
+\code{acquireGDS}.}
 }
 \value{
 For \code{acquireGDS}, a \code{gds.class} object, which are

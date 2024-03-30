@@ -6,6 +6,8 @@ persistent$handles <- list()
 #' Acquire a (possibly cached) \code{gds.class} object given it's path.
 #' 
 #' @param path String containing a path to a GDS file.
+#' @param other arguments to be passed to \code{openfn.gds()} inside
+#'     \code{acquireGDS}.
 #' @return For \code{acquireGDS}, a \code{gds.class} object, which are
 #'     identical to that returned by \code{gdsfmt::openfn.gds(path)}
 #'
@@ -31,7 +33,7 @@ persistent$handles <- list()
 #' @export
 #' @rdname acquireGDS
 
-acquireGDS <- function(path) {
+acquireGDS <- function(path, ...) {
     ## Here we set up an LRU cache for the GDS connection. 
     ## This avoids the initialization time when querying lots of columns.
     nhandles <- length(persistent$handles)
@@ -56,7 +58,7 @@ acquireGDS <- function(path) {
     output <- tryCatch(openfn.gds(path), error = function(e) e)
     if (is(output, "simpleError")) {
         showfile.gds(closeall = TRUE)
-        output <- openfn.gds(path)
+        output <- openfn.gds(path, ...)
     }
     persistent$handles[[path]] <- output
     output
