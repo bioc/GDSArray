@@ -64,7 +64,12 @@ acquireGDS <- function(path, type = NULL, ...) {
         if (any(fail1, fail2)) {
             releaseGDS(path)
         } else {
-            return(output)
+            fail3 <- tryCatch(ls.gdsn(output), error = function(e) e)
+            if (is(fail3, "simpleError")) {
+                persistent$handles <- persistent$handles[-nhandles] ## remove
+            } else { 
+                return(output)
+            }
         }
     }
     ## Pulled this value from most recent cache
