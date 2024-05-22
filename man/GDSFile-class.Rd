@@ -5,10 +5,10 @@
 \alias{GDSFile-class}
 \alias{GDSFile}
 \alias{GDSFile-constructor}
-\alias{gdsfn,GDSFile-method}
+\alias{gdsfile,GDSFile-method}
 \alias{GDSFile-method}
-\alias{gdsfn<-}
-\alias{GDSFile,gdsfn-method}
+\alias{gdsfile<-}
+\alias{GDSFile,gdsfile-method}
 \alias{$,GDSFile-method}
 \alias{gdsnodes}
 \alias{gdsnodes,ANY-method}
@@ -17,9 +17,9 @@
 \usage{
 GDSFile(file, current_path = "")
 
-\S4method{gdsfn}{GDSFile}(object)
+\S4method{gdsfile}{GDSFile}(object)
 
-gdsfn(object) <- value
+gdsfile(object) <- value
 
 \S4method{$}{GDSFile}(x, name)
 
@@ -41,7 +41,7 @@ gdsfn(object) <- value
 \item{node}{the node name of a gds file or \code{GDSFile} object.}
 }
 \value{
-\code{gdsfn}: the file path of corresponding
+\code{gdsfile}: the file path of corresponding
     \code{GDSfile} object.
 
 \code{$}: a \code{GDSFile} with updated \code{@current_path}, or
@@ -61,10 +61,10 @@ gdsfn(object) <- value
 
 \code{GDSFile}: the \code{GDSFile} class constructor.
 
-\code{gdsfn}: \code{filename} slot getter for
+\code{gdsfile}: \code{filename} slot getter for
     \code{GDSFile} object.
 
-\code{gdsfn<-}: \code{filename} slot setter for
+\code{gdsfile<-}: \code{filename} slot setter for
     \code{GDSFile} object.
 
 \code{gdsnodes}: to get the available gds nodes from a
@@ -73,7 +73,7 @@ gdsfn(object) <- value
 \examples{
 fn <- gdsExampleFileName("seqgds")
 gf <- GDSFile(fn)
-gdsfn(gf)
+gdsfile(gf)
 fn <- gdsExampleFileName("seqgds")
 gdsnodes(fn)
 gdsnodes(fn, "annotation/info")
@@ -83,5 +83,5 @@ gdsnodes(fn1, "sample.annot")
 gf <- GDSFile(fn)
 gdsnodes(gf)
 gdsnodes(gf, "genotype")
-gdsfn(gf)
+gdsfile(gf)
 }

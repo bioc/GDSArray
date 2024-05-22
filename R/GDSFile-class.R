@@ -57,31 +57,31 @@ GDSFile <- function(file, current_path="")
 
 #' @rdname GDSFile-class
 #' @aliases GDSFile-method
-#' @description \code{gdsfn}: \code{filename} slot getter for
+#' @description \code{gdsfile}: \code{filename} slot getter for
 #'     \code{GDSFile} object.
 #' @param object \code{GDSFile} object.
-#' @return \code{gdsfn}: the file path of corresponding
+#' @return \code{gdsfile}: the file path of corresponding
 #'     \code{GDSfile} object.
-#' @exportMethod gdsfn
+#' @exportMethod gdsfile
 #' @examples
 #' fn <- gdsExampleFileName("seqgds")
 #' gf <- GDSFile(fn)
-#' gdsfn(gf)
+#' gdsfile(gf)
 
-setMethod("gdsfn", "GDSFile", function(object) object@filename)
+setMethod("gdsfile", "GDSFile", function(object) object@filename)
 
 #' @rdname GDSFile-class
-#' @aliases GDSFile-method GDSFile,gdsfn-method
-#' @description \code{gdsfn<-}: \code{filename} slot setter for
+#' @aliases GDSFile-method GDSFile,gdsfile-method
+#' @description \code{gdsfile<-}: \code{filename} slot setter for
 #'     \code{GDSFile} object.
 #' @param value the new gds file path
 setGeneric(
-    "gdsfn<-",
-    function(object, value) standardGeneric("gdsfn<-"),
+    "gdsfile<-",
+    function(object, value) standardGeneric("gdsfile<-"),
     signature="object")
 
-#' @exportMethod "gdsfn<-"
-setReplaceMethod("gdsfn", "GDSFile", function(object, value) {
+#' @exportMethod "gdsfile<-"
+setReplaceMethod("gdsfile", "GDSFile", function(object, value) {
     new_filepath <- tools::file_path_as_absolute(value)
     BiocGenerics:::replaceSlots(object, filename=value, check=FALSE)
 })
@@ -122,7 +122,7 @@ setMethod("$", "GDSFile", function(x, name)
         stop(wmsg("the gds path of '", name, "' does not exist"))
     }
     if (x@current_path %in% gdsnodes(x@filename))
-        GDSArray(gdsfn(x), x@current_path)
+        GDSArray(gdsfile(x), x@current_path)
     else
         x
 })
@@ -154,7 +154,7 @@ setGeneric("gdsnodes", function(x, node) standardGeneric("gdsnodes"), signature=
 #' gf <- GDSFile(fn)
 #' gdsnodes(gf)
 #' gdsnodes(gf, "genotype")
-#' gdsfn(gf)
+#' gdsfile(gf)
 
 setMethod("gdsnodes", "ANY", function(x, node)
 {
@@ -189,5 +189,5 @@ setMethod("gdsnodes", "ANY", function(x, node)
 #' @exportMethod gdsnodes
 setMethod("gdsnodes", "GDSFile", function(x, node)
 {
-    gdsnodes(gdsfn(x), node)
+    gdsnodes(gdsfile(x), node)
 })
