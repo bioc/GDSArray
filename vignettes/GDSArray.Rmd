@@ -137,9 +137,9 @@ gt <- GDSArray(file, "genotype/data")
 seed(gt)
 ```
 
-- `gdsfn` returns the file path of the corresponding GDS file. 
+- `gdsfile` returns the file path of the corresponding GDS file. 
 ```{r, gdsfileAccessor}
-gdsfn(gt)
+gdsfile(gt)
 ```
 
 ### Available GDS nodes

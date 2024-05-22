@@ -16,7 +16,7 @@
 #' type(ga)
 #' seed(ga)
 #' dim(seed(ga))
-#' gdsfn(ga)
+#' gdsfile(ga)
 
 ## NOTE: There is no need to define dim() and dimnames() methods for
 ## GDSArraySeed/GDSArray objects. This is because the dim() and
@@ -42,20 +42,20 @@ setReplaceMethod("seed", "GDSArray", function(x, value) {
 })
 
 #' @rdname GDSArray-methods
-#' @description \code{gdsfn}: on-disk location of GDS file
+#' @description \code{gdsfile}: on-disk location of GDS file
 #'     represented by this object.
 #' @param object GDSArray, GDSMatrix, GDSArraySeed, GDSFile or
 #'     SummarizedExperiment object.
-#' @return \code{gdsfn}: the character string for the gds file path.
-setGeneric("gdsfn", function(object) standardGeneric("gdsfn"),
+#' @return \code{gdsfile}: the character string for the gds file path.
+setGeneric("gdsfile", function(object) standardGeneric("gdsfile"),
            signature="object")
 
 #' @rdname GDSArray-methods
-#' @exportMethod gdsfn
-setMethod("gdsfn", "GDSArraySeed", function(object) object@filename)
+#' @exportMethod gdsfile
+setMethod("gdsfile", "GDSArraySeed", function(object) object@filename)
 
 #' @rdname GDSArray-methods
-setMethod("gdsfn", "GDSArray", function(object) gdsfn(seed(object)))
+setMethod("gdsfile", "GDSArray", function(object) gdsfile(seed(object)))
 
 #' @rdname GDSArray-methods
-setMethod("gdsfn", "DelayedArray", function(object) gdsfn(seed(object)))
+setMethod("gdsfile", "DelayedArray", function(object) gdsfile(seed(object)))

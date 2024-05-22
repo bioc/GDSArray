@@ -18,7 +18,7 @@ setClass("GDSArraySeed",
 
 ## slot accessors
 ## .gds      <- function(x) x@gds
-.filename <- function(x) x@filename
+## .filename <- function(x) x@filename  ## this can be replace by gdsfile() method
 .varname  <- function(x) x@varname
 ## .dim      <- function(x) x@dim  ## REMOVE: dim() works directly if is one slot.
 
@@ -30,7 +30,7 @@ setMethod(
     "show", "GDSArraySeed",
     function(object) {
         cat("GDSArraySeed\n",
-            "GDS File path: ", .filename(object), "\n",
+            "GDS File path: ", gdsfile(object), "\n",
             "Array node: ", .varname(object), "\n",
             "Dim: ", paste(dim(object), collapse=" x "), "\n",
             sep="")
@@ -49,7 +49,7 @@ setMethod(
     ##       cannot contain NAs or non-positive values.
     ## https://bioconductor.org/packages/release/bioc/vignettes/DelayedArray/inst/doc/02-Implementing_a_backend.html#extract_array
     ans_dim <- DelayedArray:::get_Nindex_lengths(index, dim(x))
-    gds <- acquireGDS(.filename(x))
+    gds <- acquireGDS(gdsfile(x))
     ## read
     if (any(ans_dim == 0L))
     {     
