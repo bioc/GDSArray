@@ -10,9 +10,9 @@ test_that("GDSFile constructor works", {
 
 test_that("gdsfile getter and setter works", {
     gf <- GDSFile(file)
-    expect_equal(gdsfn(gf), file)
+    expect_equal(gdsfile(gf), file)
     
-    gdsfn(gf) <- file1
+    gdsfile(gf) <- file1
     expect_true(validObject(gf))
 })
 
